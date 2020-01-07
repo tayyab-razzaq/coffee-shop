@@ -138,6 +138,12 @@ def bad_request(error):
 
 @app.errorhandler(STATUS_UNAUTHORIZED)
 def unauthorized(error):
+    """
+    Error handler for unauthorized with status code 401.
+
+    :param error:
+    :return:
+    """
     return jsonify({
         'success': False,
         'error': STATUS_UNAUTHORIZED,
