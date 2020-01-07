@@ -8,7 +8,7 @@ from .database.models import setup_db
 
 from .constants import (
     STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES,
-    STATUS_METHOD_NOT_ALLOWED, STATUS_NOT_FOUND, STATUS_UNAUTHORIZED
+    STATUS_METHOD_NOT_ALLOWED, STATUS_NOT_FOUND, STATUS_UNAUTHORIZED, STATUS_UNPROCESSABLE_ENTITY
 )
 
 app = Flask(__name__)
@@ -178,3 +178,12 @@ def method_not_allowed(error):
         'error': STATUS_METHOD_NOT_ALLOWED,
         'message': STATUS_CODE_MESSAGES[STATUS_METHOD_NOT_ALLOWED]
     }), STATUS_METHOD_NOT_ALLOWED
+
+
+@app.errorhandler(STATUS_UNPROCESSABLE_ENTITY)
+def unprocessable_entity(error):
+    return jsonify({
+        'success': False,
+        'error': STATUS_UNPROCESSABLE_ENTITY,
+        'message': STATUS_CODE_MESSAGES[STATUS_UNPROCESSABLE_ENTITY]
+    }), STATUS_UNPROCESSABLE_ENTITY
