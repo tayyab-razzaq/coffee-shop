@@ -19,7 +19,12 @@ CORS(app, resources={r"*": {"origins": "*"}})
 @app.after_request
 def after_request(response):
     response.headers.add(
-        'Access-Control-Allow-Headers', 'Content-Type, Authorization'
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization'
+    )
+    response.headers.add(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PUT, PATCH, DELETE, OPTIONS'
     )
     return response
 
