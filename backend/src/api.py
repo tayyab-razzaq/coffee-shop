@@ -81,27 +81,6 @@ CORS(app)
         or appropriate status code indicating reason for failure
 """
 
-# Error Handling
-"""
-Example error handling for unprocessable entity
-"""
-
-
-@app.errorhandler(422)
-def unprocessable(error):
-    """
-    Unprocessable.
-
-    :param error:
-    :return:
-    """
-    return jsonify({
-        "success": False,
-        "error": 422,
-        "message": "unprocessable"
-    }), 422
-
-
 """
 @TODO implement error handlers using the @app.errorhandler(error) decorator
     each error handler should return (with approprate messages):
@@ -122,6 +101,8 @@ def unprocessable(error):
 @TODO implement error handler for AuthError
     error handler should conform to general task above
 """
+
+# Error Handling
 
 
 @app.errorhandler(STATUS_BAD_REQUEST)
