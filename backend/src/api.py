@@ -6,7 +6,7 @@ from flask_cors import CORS
 
 from .database.models import setup_db
 
-from .constants import STATUS_BAD_REQUEST, STATUS_CODE_MESSAGES
+from .constants import STATUS_BAD_REQUEST, STATUS_CODE_MESSAGES, STATUS_UNAUTHORIZED
 
 app = Flask(__name__)
 setup_db(app)
@@ -134,3 +134,12 @@ def bad_request(error):
         'error': STATUS_BAD_REQUEST,
         'message': STATUS_CODE_MESSAGES[STATUS_BAD_REQUEST]
     }), STATUS_BAD_REQUEST
+
+
+@app.errorhandler(STATUS_UNAUTHORIZED)
+def unauthorized(error):
+    return jsonify({
+        'success': False,
+        'error': STATUS_UNAUTHORIZED,
+        'message': STATUS_CODE_MESSAGES[STATUS_UNAUTHORIZED]
+    }), STATUS_UNAUTHORIZED
