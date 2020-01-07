@@ -16,6 +16,14 @@ setup_db(app)
 CORS(app, resources={r"*": {"origins": "*"}})
 
 
+@app.after_request
+def after_request(response):
+    response.headers.add(
+        'Access-Control-Allow-Headers', 'Content-Type, Authorization'
+    )
+    return response
+
+
 """
 @TODO uncomment the following line to initialize the database
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
