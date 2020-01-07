@@ -168,6 +168,12 @@ def forbidden(error):
 
 @app.errorhandler(STATUS_NOT_FOUND)
 def not_found(error):
+    """
+    Error handler for not found with status code 404.
+
+    :param error:
+    :return:
+    """
     return jsonify({
         'success': False,
         'error': STATUS_NOT_FOUND,
