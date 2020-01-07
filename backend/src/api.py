@@ -186,6 +186,12 @@ def not_found(error):
 
 @app.errorhandler(STATUS_METHOD_NOT_ALLOWED)
 def method_not_allowed(error):
+    """
+    Error handler for method not allowed with status code 405.
+
+    :param error:
+    :return:
+    """
     return jsonify({
         'success': False,
         'error': STATUS_METHOD_NOT_ALLOWED,
