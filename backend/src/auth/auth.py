@@ -2,6 +2,8 @@
 
 from functools import wraps
 
+from ..constants import STATUS_CODE_MESSAGES, STATUS_FORBIDDEN
+
 AUTH0_DOMAIN = 'udacity-fsnd.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'dev'
@@ -64,7 +66,14 @@ def check_permissions(permission, payload):
     :param payload:
     :return:
     """
-    raise Exception('Not Implemented')
+    if 'permissions' in payload and permission in payload['permissions']:
+        return True
+
+    raise AuthError({
+        'success': False,
+        'error': STATUS_FORBIDDEN,
+        'message': STATUS_CODE_MESSAGES[STATUS_FORBIDDEN]
+    }, STATUS_FORBIDDEN)
 
 
 """
