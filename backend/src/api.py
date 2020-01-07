@@ -197,6 +197,12 @@ def unprocessable_entity(error):
 
 @app.errorhandler(STATUS_INTERNAL_SERVER_ERROR)
 def internal_server_error(error):
+    """
+    Error handler for internal server error with status code 500.
+
+    :param error:
+    :return:
+    """
     return jsonify({
         'success': False,
         'error': STATUS_INTERNAL_SERVER_ERROR,
