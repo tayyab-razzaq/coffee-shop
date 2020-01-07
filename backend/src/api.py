@@ -6,6 +6,8 @@ from flask_cors import CORS
 
 from .database.models import setup_db
 
+from .constants import STATUS_BAD_REQUEST, STATUS_CODE_MESSAGES
+
 app = Flask(__name__)
 setup_db(app)
 CORS(app)
@@ -117,3 +119,12 @@ def unprocessable(error):
 @TODO implement error handler for AuthError
     error handler should conform to general task above
 """
+
+
+@app.errorhandler(STATUS_BAD_REQUEST)
+def bad_request(error):
+    return jsonify({
+        'success': False,
+        'error': STATUS_BAD_REQUEST,
+        'message': STATUS_CODE_MESSAGES[STATUS_BAD_REQUEST]
+    }), STATUS_BAD_REQUEST
