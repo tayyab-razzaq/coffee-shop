@@ -7,7 +7,7 @@ from flask_cors import CORS
 from .database.models import setup_db
 
 from .constants import (
-    STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES,
+    STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES, STATUS_INTERNAL_SERVER_ERROR,
     STATUS_METHOD_NOT_ALLOWED, STATUS_NOT_FOUND, STATUS_UNAUTHORIZED, STATUS_UNPROCESSABLE_ENTITY
 )
 
@@ -193,3 +193,12 @@ def unprocessable_entity(error):
         'error': STATUS_UNPROCESSABLE_ENTITY,
         'message': STATUS_CODE_MESSAGES[STATUS_UNPROCESSABLE_ENTITY]
     }), STATUS_UNPROCESSABLE_ENTITY
+
+
+@app.errorhandler(STATUS_INTERNAL_SERVER_ERROR)
+def internal_server_error(error):
+    return jsonify({
+        'success': False,
+        'error': STATUS_INTERNAL_SERVER_ERROR,
+        'message': STATUS_CODE_MESSAGES[STATUS_INTERNAL_SERVER_ERROR]
+    }), STATUS_INTERNAL_SERVER_ERROR
