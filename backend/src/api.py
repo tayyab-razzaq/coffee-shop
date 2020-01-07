@@ -6,7 +6,10 @@ from flask_cors import CORS
 
 from .database.models import setup_db
 
-from .constants import STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES, STATUS_NOT_FOUND, STATUS_UNAUTHORIZED
+from .constants import (
+    STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES,
+    STATUS_METHOD_NOT_ALLOWED, STATUS_NOT_FOUND, STATUS_UNAUTHORIZED
+)
 
 app = Flask(__name__)
 setup_db(app)
@@ -179,3 +182,12 @@ def not_found(error):
         'error': STATUS_NOT_FOUND,
         'message': STATUS_CODE_MESSAGES[STATUS_NOT_FOUND]
     }), STATUS_NOT_FOUND
+
+
+@app.errorhandler(STATUS_METHOD_NOT_ALLOWED)
+def method_not_allowed(error):
+    return jsonify({
+        'success': False,
+        'error': STATUS_METHOD_NOT_ALLOWED,
+        'message': STATUS_CODE_MESSAGES[STATUS_METHOD_NOT_ALLOWED]
+    }), STATUS_METHOD_NOT_ALLOWED
