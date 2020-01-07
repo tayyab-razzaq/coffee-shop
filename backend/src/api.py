@@ -153,6 +153,12 @@ def unauthorized(error):
 
 @app.errorhandler(STATUS_FORBIDDEN)
 def forbidden(error):
+    """
+    Error handler for forbidden with status code 403.
+
+    :param error:
+    :return:
+    """
     return jsonify({
         'success': False,
         'error': STATUS_FORBIDDEN,
