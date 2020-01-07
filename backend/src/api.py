@@ -6,7 +6,7 @@ from flask_cors import CORS
 
 from .database.models import setup_db
 
-from .constants import STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES, STATUS_UNAUTHORIZED
+from .constants import STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES, STATUS_NOT_FOUND, STATUS_UNAUTHORIZED
 
 app = Flask(__name__)
 setup_db(app)
@@ -164,3 +164,12 @@ def forbidden(error):
         'error': STATUS_FORBIDDEN,
         'message': STATUS_CODE_MESSAGES[STATUS_FORBIDDEN]
     }), STATUS_FORBIDDEN
+
+
+@app.errorhandler(STATUS_NOT_FOUND)
+def not_found(error):
+    return jsonify({
+        'success': False,
+        'error': STATUS_NOT_FOUND,
+        'message': STATUS_CODE_MESSAGES[STATUS_NOT_FOUND]
+    }), STATUS_NOT_FOUND
