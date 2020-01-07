@@ -182,6 +182,12 @@ def method_not_allowed(error):
 
 @app.errorhandler(STATUS_UNPROCESSABLE_ENTITY)
 def unprocessable_entity(error):
+    """
+    Error handler for unprocessable entity with status code 422.
+
+    :param error:
+    :return:
+    """
     return jsonify({
         'success': False,
         'error': STATUS_UNPROCESSABLE_ENTITY,
