@@ -123,6 +123,12 @@ def unprocessable(error):
 
 @app.errorhandler(STATUS_BAD_REQUEST)
 def bad_request(error):
+    """
+    Error handler for bad request with status code 400.
+
+    :param: error
+    :return:
+    """
     return jsonify({
         'success': False,
         'error': STATUS_BAD_REQUEST,
