@@ -13,7 +13,8 @@ from .constants import (
 
 app = Flask(__name__)
 setup_db(app)
-CORS(app)
+CORS(app, resources={r"*": {"origins": "*"}})
+
 
 """
 @TODO uncomment the following line to initialize the database
