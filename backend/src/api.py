@@ -1,10 +1,10 @@
-"""Docstring."""
+"""Module for api."""
 
-from flask import Flask, abort, jsonify
+from flask import Flask, abort, jsonify, request
 
 from flask_cors import CORS
 
-from .database import get_all_drinks, setup_db
+from .database import add_new_drink, get_all_drinks, setup_db
 
 from .constants import (
     STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES, STATUS_INTERNAL_SERVER_ERROR,
@@ -81,14 +81,29 @@ def get_drinks_detail():
 """
 @TODO implement endpoint
     POST /drinks
-        it should create a new row in the drinks table
-        it should require the 'post:drinks' permission
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drink}
-    where drink an array containing
-    only the newly created drink or appropriate status code
-    indicating reason for failure
+    it should require the 'post:drinks' permission
 """
+
+
+@app.route('/drinks', methods=['POST'])
+def add_drink():
+    """
+    Add new drink in the table.
+
+    :return:
+    """
+    try:
+        drink_data = request.get_json()
+        drink = add_new_drink(drink_data)
+        result = {
+            'success': True,
+            'drinks': [drink]
+        }
+        return jsonify(result)
+
+    except Exception as exp:
+        abort(exp.code)
+
 
 """
 @TODO implement endpoint
