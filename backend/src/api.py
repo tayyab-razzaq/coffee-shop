@@ -1,6 +1,4 @@
-"""Docstring."""
-
-import json
+"""Module for api."""
 
 from flask import Flask, abort, jsonify, request
 

@@ -1,3 +1,5 @@
+"""Module for database utils."""
+
 from .models import Drink
 
 
