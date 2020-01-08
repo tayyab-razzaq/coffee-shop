@@ -24,3 +24,11 @@ def add_new_drink(drink):
     instance = Drink(**drink)
     instance.insert()
     return instance.long()
+
+
+def update_drink(drink_id, drink_data):
+    drink = Drink.query.filter_by(id=drink_id).first()
+    drink.title = drink_data.get('title')
+    drink.recipe = drink_data.get('recipe')
+    drink.update()
+    return drink.long()

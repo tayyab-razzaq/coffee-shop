@@ -4,7 +4,7 @@ from flask import Flask, abort, jsonify, request
 
 from flask_cors import CORS
 
-from .database import add_new_drink, get_all_drinks, setup_db
+from .database import add_new_drink, get_all_drinks, setup_db, update_drink
 
 from .constants import (
     STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES, STATUS_INTERNAL_SERVER_ERROR,
@@ -95,12 +95,10 @@ def add_drink():
     try:
         drink_data = request.get_json()
         drink = add_new_drink(drink_data)
-        result = {
+        return jsonify({
             'success': True,
             'drinks': [drink]
-        }
-        return jsonify(result)
-
+        })
     except Exception as exp:
         abort(exp.code)
 
@@ -118,6 +116,17 @@ def add_drink():
     only the updated drink or appropriate status code
     indicating reason for failure
 """
+
+
+@app.route('/drinks/<drink_id>', methods=['PATCH'])
+def update_drink(drink_id):
+    drink_data = request.get_json()
+    drink = update_drink(drink_id, drink_data)
+    return jsonify({
+        'success': True,
+        'drinks': [drink]
+    })
+
 
 """
 @TODO implement endpoint
