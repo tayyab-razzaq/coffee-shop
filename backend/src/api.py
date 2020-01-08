@@ -150,11 +150,17 @@ def update_drink(drink_id):
 
 @app.route('/drinks/<drink_id>', methods=['DELETE'])
 def delete_drink(drink_id):
+    """
+    Delete drink by given drink id.
+
+    :param drink_id:
+    :return:
+    """
     try:
         drink = Drink.query.filter_by(id=drink_id).first()
         if not drink:
             abort(STATUS_NOT_FOUND)
-        
+
         drink.delete()
         jsonify({
             'success': True,
