@@ -2,6 +2,8 @@
 
 from functools import wraps
 
+from ..constants import STATUS_CODE_MESSAGES, STATUS_FORBIDDEN
+
 AUTH0_DOMAIN = 'udacity-fsnd.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'dev'
@@ -42,20 +44,6 @@ def get_token_auth_header():
     raise Exception('Not Implemented')
 
 
-"""
-@TODO implement check_permissions(permission, payload) method
-    @INPUTS
-        permission: string permission (i.e. 'post:drink')
-        payload: decoded jwt payload
-
-    it should raise an AuthError if permissions are not included
-    in the payload
-    !!NOTE check your RBAC settings in Auth0
-    it should raise an AuthError if the requested permission
-    string is not in the payload permissions array return true otherwise
-"""
-
-
 def check_permissions(permission, payload):
     """
     Check permission against a payload.
@@ -64,7 +52,14 @@ def check_permissions(permission, payload):
     :param payload:
     :return:
     """
-    raise Exception('Not Implemented')
+    if 'permissions' in payload and permission in payload['permissions']:
+        return True
+
+    raise AuthError({
+        'success': False,
+        'error': STATUS_FORBIDDEN,
+        'message': STATUS_CODE_MESSAGES[STATUS_FORBIDDEN]
+    }, STATUS_FORBIDDEN)
 
 
 """
