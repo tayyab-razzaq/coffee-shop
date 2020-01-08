@@ -4,7 +4,7 @@ from flask import Flask, jsonify
 
 from flask_cors import CORS
 
-from .database.models import setup_db
+from .database import get_all_drinks, setup_db
 
 from .constants import (
     STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES, STATUS_INTERNAL_SERVER_ERROR,
@@ -46,6 +46,15 @@ def after_request(response):
     where drinks is the list of drinks
     or appropriate status code indicating reason for failure
 """
+
+
+@app.route('/drinks')
+def get_drinks():
+    return jsonify({
+        'success': True,
+        'drinks': get_all_drinks()
+    })
+
 
 """
 @TODO implement endpoint
