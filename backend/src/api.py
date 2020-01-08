@@ -147,6 +147,18 @@ def update_drink(drink_id):
         or appropriate status code indicating reason for failure
 """
 
+
+@app.route('/drinks/<drink_id>', methods=['DELETE'])
+def delete_drink(drink_id):
+    drink = Drink.query.filter_by(id=drink_id).first()
+    drink.delete()
+    result = {
+        'success': True,
+        'delete': drink_id
+    }
+    return jsonify(result)
+
+
 """
 @TODO implement error handlers using the @app.errorhandler(error) decorator
     each error handler should return (with approprate messages):
