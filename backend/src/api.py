@@ -42,7 +42,7 @@ def after_request(response):
 @app.route('/drinks')
 def get_drinks():
     """
-    Get drinks api.
+    Get drinks api with short detail.
 
     :return:
     """
@@ -58,12 +58,25 @@ def get_drinks():
 """
 @TODO implement endpoint
     GET /drinks-detail
-        it should require the 'get:drinks-detail' permission
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drinks}
-    where drinks is the list of drinks
-    or appropriate status code indicating reason for failure
+    it should require the 'get:drinks-detail' permission
 """
+
+
+@app.route('/drinks-detail')
+def get_drinks_detail():
+    """
+    Get drinks api with long detail.
+
+    :return:
+    """
+    try:
+        return jsonify({
+            'success': True,
+            'drinks': get_all_drinks(is_short=False)
+        })
+    except Exception as exp:
+        abort(exp.code)
+
 
 """
 @TODO implement endpoint
