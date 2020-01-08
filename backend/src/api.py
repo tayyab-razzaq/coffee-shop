@@ -58,11 +58,7 @@ def get_drinks():
 """
 @TODO implement endpoint
     GET /drinks-detail
-        it should require the 'get:drinks-detail' permission
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drinks}
-    where drinks is the list of drinks
-    or appropriate status code indicating reason for failure
+    it should require the 'get:drinks-detail' permission
 """
 
 
