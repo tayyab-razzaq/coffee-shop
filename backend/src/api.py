@@ -182,12 +182,6 @@ def delete_drink(drink_id):
     error handler should conform to general task above
 """
 
-"""
-@TODO implement error handler for AuthError
-    error handler should conform to general task above
-"""
-
-
 # Error Handling
 
 
