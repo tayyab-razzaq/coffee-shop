@@ -166,17 +166,6 @@ def delete_drink(drink_id):
         abort(exp.code)
 
 
-"""
-@TODO implement error handlers using the @app.errorhandler(error) decorator
-    each error handler should return (with approprate messages):
-             jsonify({
-                    "success": False,
-                    "error": 404,
-                    "message": "resource not found"
-                    }), 404
-
-"""
-
 # Error Handling
 
 
