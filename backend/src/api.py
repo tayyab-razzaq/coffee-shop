@@ -1,6 +1,6 @@
 """Docstring."""
 
-from flask import Flask, jsonify
+from flask import Flask, abort, jsonify
 
 from flask_cors import CORS
 
@@ -50,10 +50,13 @@ def after_request(response):
 
 @app.route('/drinks')
 def get_drinks():
-    return jsonify({
-        'success': True,
-        'drinks': get_all_drinks()
-    })
+    try:
+        return jsonify({
+            'success': True,
+            'drinks': get_all_drinks()
+        })
+    except Exception as exp:
+        abort(exp.code)
 
 
 """
