@@ -120,12 +120,15 @@ def add_drink():
 
 @app.route('/drinks/<drink_id>', methods=['PATCH'])
 def update_drink(drink_id):
-    drink_data = request.get_json()
-    drink = update_drink(drink_id, drink_data)
-    return jsonify({
-        'success': True,
-        'drinks': [drink]
-    })
+    try:
+        drink_data = request.get_json()
+        drink = update_drink(drink_id, drink_data)
+        return jsonify({
+            'success': True,
+            'drinks': [drink]
+        })
+    except Exception as exp:
+        abort(exp.code)
 
 
 """
