@@ -150,13 +150,15 @@ def update_drink(drink_id):
 
 @app.route('/drinks/<drink_id>', methods=['DELETE'])
 def delete_drink(drink_id):
-    drink = Drink.query.filter_by(id=drink_id).first()
-    drink.delete()
-    result = {
-        'success': True,
-        'delete': drink_id
-    }
-    return jsonify(result)
+    try:
+        drink = Drink.query.filter_by(id=drink_id).first()
+        drink.delete()
+        jsonify({
+            'success': True,
+            'delete': drink_id
+        })
+    except Exception as exp:
+        abort(exp.code)
 
 
 """
