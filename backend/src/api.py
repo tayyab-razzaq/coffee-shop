@@ -94,7 +94,12 @@ def get_drinks_detail():
 
 
 @app.route('/drinks', methods=['POST'])
-def add_drinks():
+def add_drink():
+    """
+    Add new drink in the table.
+
+    :return:
+    """
     try:
         drink_data = request.get_json()
         drink = add_new_drink(drink_data)
@@ -106,6 +111,7 @@ def add_drinks():
 
     except Exception as exp:
         abort(exp.code)
+
 
 """
 @TODO implement endpoint

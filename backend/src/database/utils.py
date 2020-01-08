@@ -13,6 +13,12 @@ def get_all_drinks(is_short=True):
 
 
 def add_new_drink(drink):
+    """
+    Create a new drink in the table.
+
+    :param drink:
+    :return:
+    """
     instance = Drink(**drink)
     instance.insert()
     return instance.long()
