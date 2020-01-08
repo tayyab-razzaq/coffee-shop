@@ -193,6 +193,12 @@ def delete_drink(drink_id):
 
 @app.errorhandler(AuthError)
 def auth_error(error):
+    """
+    Error handling for our custom auth error class.
+
+    :param error:
+    :return:
+    """
     return jsonify(error.error), error.status_code
 
 
