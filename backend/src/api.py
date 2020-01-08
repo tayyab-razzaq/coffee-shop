@@ -152,6 +152,9 @@ def update_drink(drink_id):
 def delete_drink(drink_id):
     try:
         drink = Drink.query.filter_by(id=drink_id).first()
+        if not drink:
+            abort(STATUS_NOT_FOUND)
+        
         drink.delete()
         jsonify({
             'success': True,
