@@ -83,13 +83,7 @@ def get_drinks_detail():
 """
 @TODO implement endpoint
     POST /drinks
-        it should create a new row in the drinks table
-        it should require the 'post:drinks' permission
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drink}
-    where drink an array containing
-    only the newly created drink or appropriate status code
-    indicating reason for failure
+    it should require the 'post:drinks' permission
 """
 
 
