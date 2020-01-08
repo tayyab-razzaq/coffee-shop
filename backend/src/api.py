@@ -5,13 +5,15 @@ from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
 
 from .auth import AuthError
-
-from .database import Drink, add_new_drink, get_all_drinks, setup_db, update_drink_in_db
-
 from .constants import (
-    STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES, STATUS_INTERNAL_SERVER_ERROR,
-    STATUS_METHOD_NOT_ALLOWED, STATUS_NOT_FOUND, STATUS_UNAUTHORIZED, STATUS_UNPROCESSABLE_ENTITY
+    STATUS_BAD_REQUEST, STATUS_CODE_MESSAGES, STATUS_FORBIDDEN,
+    STATUS_INTERNAL_SERVER_ERROR, STATUS_METHOD_NOT_ALLOWED,
+    STATUS_NOT_FOUND, STATUS_UNAUTHORIZED, STATUS_UNPROCESSABLE_ENTITY
 )
+from .database import (
+    Drink, add_new_drink, get_all_drinks, setup_db, update_drink_in_db
+)
+
 
 app = Flask(__name__)
 setup_db(app)
@@ -20,6 +22,12 @@ CORS(app, resources={r"*": {"origins": "*"}})
 
 @app.after_request
 def after_request(response):
+    """
+    After request method to add cors.
+
+    :param response:
+    :return:
+    """
     response.headers.add(
         'Access-Control-Allow-Headers',
         'Content-Type, Authorization'
@@ -109,8 +117,7 @@ def add_drink():
 
 """
 @TODO implement endpoint
-    PATCH /drinks/<id>    
-    it should require the 'patch:drinks' permission
+    PATCH /drinks/<id> it should require the 'patch:drinks' permission
 """
 
 
