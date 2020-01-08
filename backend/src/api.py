@@ -42,7 +42,7 @@ def after_request(response):
 @app.route('/drinks')
 def get_drinks():
     """
-    Get drinks api.
+    Get drinks api with short detail.
 
     :return:
     """
@@ -68,6 +68,11 @@ def get_drinks():
 
 @app.route('/drinks-detail')
 def get_drinks_detail():
+    """
+    Get drinks api with long detail.
+
+    :return:
+    """
     try:
         return jsonify({
             'success': True,
