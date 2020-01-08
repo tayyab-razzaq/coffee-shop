@@ -138,13 +138,7 @@ def update_drink(drink_id):
 """
 @TODO implement endpoint
     DELETE /drinks/<id>
-        where <id> is the existing model id
-        it should respond with a 404 error if <id> is not found
-        it should delete the corresponding row for <id>
-        it should require the 'delete:drinks' permission
-    returns status code 200 and json {"success": True, "delete": id}
-    where id is the id of the deleted record
-        or appropriate status code indicating reason for failure
+    it should require the 'delete:drinks' permission
 """
 
 
