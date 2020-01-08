@@ -65,6 +65,15 @@ def get_drinks():
     or appropriate status code indicating reason for failure
 """
 
+
+@app.route('/drinks-detail')
+def get_drinks_detail():
+    return jsonify({
+        'success': True,
+        'drinks': get_all_drinks(is_short=False)
+    })
+
+
 """
 @TODO implement endpoint
     POST /drinks
