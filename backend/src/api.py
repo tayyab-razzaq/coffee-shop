@@ -50,6 +50,11 @@ def after_request(response):
 
 @app.route('/drinks')
 def get_drinks():
+    """
+    Get drinks api.
+
+    :return:
+    """
     try:
         return jsonify({
             'success': True,
