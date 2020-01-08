@@ -95,14 +95,17 @@ def get_drinks_detail():
 
 @app.route('/drinks', methods=['POST'])
 def add_drinks():
-    drink_data = request.get_json()
-    drink = add_new_drink(drink_data)
-    result = {
-        'success': True,
-        'drinks': [drink]
-    }
-    return jsonify(result)
+    try:
+        drink_data = request.get_json()
+        drink = add_new_drink(drink_data)
+        result = {
+            'success': True,
+            'drinks': [drink]
+        }
+        return jsonify(result)
 
+    except Exception as exp:
+        abort(exp.code)
 
 """
 @TODO implement endpoint
