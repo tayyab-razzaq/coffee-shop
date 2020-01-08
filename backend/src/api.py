@@ -4,6 +4,8 @@ from flask import Flask, abort, jsonify, request
 
 from flask_cors import CORS
 
+from .auth import AuthError
+
 from .database import Drink, add_new_drink, get_all_drinks, setup_db, update_drink_in_db
 
 from .constants import (
@@ -187,6 +189,11 @@ def delete_drink(drink_id):
 
 
 # Error Handling
+
+
+@app.errorhandler(AuthError)
+def auth_error(error):
+    return jsonify(error.error), error.status_code
 
 
 @app.errorhandler(STATUS_BAD_REQUEST)
