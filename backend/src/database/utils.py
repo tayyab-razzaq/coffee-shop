@@ -28,7 +28,7 @@ def add_new_drink(drink):
 
 def update_drink_in_db(drink, drink_data):
     """
-    Update drink in db by given drink id and drink data and return the updated drink detail.
+    Update drink in db by given drink data.
 
     :param drink:
     :param drink_data:
