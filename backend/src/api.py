@@ -4,7 +4,7 @@ from flask import Flask, abort, jsonify, request
 
 from flask_cors import CORS
 
-from .database import add_new_drink, get_all_drinks, setup_db
+from .database import Drink, add_new_drink, get_all_drinks, setup_db, update_drink_in_db
 
 from .constants import (
     STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES, STATUS_INTERNAL_SERVER_ERROR,
@@ -34,6 +34,8 @@ def after_request(response):
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 """
+
+
 # db_drop_and_create_all()
 
 # ROUTES
@@ -95,29 +97,43 @@ def add_drink():
     try:
         drink_data = request.get_json()
         drink = add_new_drink(drink_data)
-        result = {
+        return jsonify({
             'success': True,
             'drinks': [drink]
-        }
-        return jsonify(result)
-
+        })
     except Exception as exp:
         abort(exp.code)
 
 
 """
 @TODO implement endpoint
-    PATCH /drinks/<id>
-        where <id> is the existing model id
-        it should respond with a 404 error if <id> is not found
-        it should update the corresponding row for <id>
-        it should require the 'patch:drinks' permission
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drink}
-    where drink an array containing
-    only the updated drink or appropriate status code
-    indicating reason for failure
+    PATCH /drinks/<id>    
+    it should require the 'patch:drinks' permission
 """
+
+
+@app.route('/drinks/<drink_id>', methods=['PATCH'])
+def update_drink(drink_id):
+    """
+    Update drink by given drink id.
+
+    :param drink_id:
+    :return:
+    """
+    try:
+        drink_data = request.get_json()
+        drink = Drink.query.filter_by(id=drink_id).first()
+        if not drink:
+            abort(STATUS_NOT_FOUND)
+
+        update_drink_in_db(drink, drink_data)
+        return jsonify({
+            'success': True,
+            'drinks': [drink.long()]
+        })
+    except Exception as exp:
+        abort(exp.code)
+
 
 """
 @TODO implement endpoint
@@ -151,6 +167,7 @@ def add_drink():
 @TODO implement error handler for AuthError
     error handler should conform to general task above
 """
+
 
 # Error Handling
 

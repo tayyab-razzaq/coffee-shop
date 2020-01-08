@@ -24,3 +24,16 @@ def add_new_drink(drink):
     instance = Drink(**drink)
     instance.insert()
     return instance.long()
+
+
+def update_drink_in_db(drink, drink_data):
+    """
+    Update drink in db by given drink data.
+
+    :param drink:
+    :param drink_data:
+    :return:
+    """
+    drink.title = drink_data.get('title')
+    drink.recipe = drink_data.get('recipe')
+    drink.update()
