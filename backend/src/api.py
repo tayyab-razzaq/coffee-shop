@@ -4,7 +4,7 @@ from flask import Flask, abort, jsonify, request
 
 from flask_cors import CORS
 
-from .database import add_new_drink, get_all_drinks, setup_db, update_drink_in_db
+from .database import Drink, add_new_drink, get_all_drinks, setup_db, update_drink_in_db
 
 from .constants import (
     STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES, STATUS_INTERNAL_SERVER_ERROR,
@@ -108,7 +108,7 @@ def add_drink():
 """
 @TODO implement endpoint
     PATCH /drinks/<id>
-        where <id> is the existing model id
+        
         it should respond with a 404 error if <id> is not found
         it should update the corresponding row for <id>
         it should require the 'patch:drinks' permission
@@ -130,10 +130,14 @@ def update_drink(drink_id):
     """
     try:
         drink_data = request.get_json()
-        drink = update_drink_in_db(drink_id, drink_data)
+        drink = Drink.query.filter_by(id=drink_id).first()
+        if not drink:
+            abort(STATUS_NOT_FOUND)
+
+        update_drink_in_db(drink, drink_data)
         return jsonify({
             'success': True,
-            'drinks': [drink]
+            'drinks': [drink.long()]
         })
     except Exception as exp:
         abort(exp.code)
