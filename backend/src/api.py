@@ -1,10 +1,12 @@
 """Docstring."""
 
-from flask import Flask, abort, jsonify
+import json
+
+from flask import Flask, abort, jsonify, request
 
 from flask_cors import CORS
 
-from .database import get_all_drinks, setup_db
+from .database import add_new_drink, get_all_drinks, setup_db
 
 from .constants import (
     STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES, STATUS_INTERNAL_SERVER_ERROR,
@@ -89,6 +91,18 @@ def get_drinks_detail():
     only the newly created drink or appropriate status code
     indicating reason for failure
 """
+
+
+@app.route('/drinks', methods=['POST'])
+def add_drinks():
+    drink_data = request.get_json()
+    drink = add_new_drink(drink_data)
+    result = {
+        'success': True,
+        'drinks': [drink]
+    }
+    return jsonify(result)
+
 
 """
 @TODO implement endpoint
