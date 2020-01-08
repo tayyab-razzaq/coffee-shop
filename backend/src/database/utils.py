@@ -26,7 +26,14 @@ def add_new_drink(drink):
     return instance.long()
 
 
-def update_drink(drink_id, drink_data):
+def update_drink_in_db(drink_id, drink_data):
+    """
+    Update drink in db by given drink id and drink data and return the updated drink detail.
+
+    :param drink_id:
+    :param drink_data:
+    :return:
+    """
     drink = Drink.query.filter_by(id=drink_id).first()
     drink.title = drink_data.get('title')
     drink.recipe = drink_data.get('recipe')

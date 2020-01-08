@@ -4,7 +4,7 @@ from flask import Flask, abort, jsonify, request
 
 from flask_cors import CORS
 
-from .database import add_new_drink, get_all_drinks, setup_db, update_drink
+from .database import add_new_drink, get_all_drinks, setup_db, update_drink_in_db
 
 from .constants import (
     STATUS_BAD_REQUEST, STATUS_FORBIDDEN, STATUS_CODE_MESSAGES, STATUS_INTERNAL_SERVER_ERROR,
@@ -34,6 +34,8 @@ def after_request(response):
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 """
+
+
 # db_drop_and_create_all()
 
 # ROUTES
@@ -120,9 +122,15 @@ def add_drink():
 
 @app.route('/drinks/<drink_id>', methods=['PATCH'])
 def update_drink(drink_id):
+    """
+    Update drink by given drink id.
+
+    :param drink_id:
+    :return:
+    """
     try:
         drink_data = request.get_json()
-        drink = update_drink(drink_id, drink_data)
+        drink = update_drink_in_db(drink_id, drink_data)
         return jsonify({
             'success': True,
             'drinks': [drink]
@@ -163,6 +171,7 @@ def update_drink(drink_id):
 @TODO implement error handler for AuthError
     error handler should conform to general task above
 """
+
 
 # Error Handling
 
