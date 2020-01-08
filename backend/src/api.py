@@ -68,10 +68,13 @@ def get_drinks():
 
 @app.route('/drinks-detail')
 def get_drinks_detail():
-    return jsonify({
-        'success': True,
-        'drinks': get_all_drinks(is_short=False)
-    })
+    try:
+        return jsonify({
+            'success': True,
+            'drinks': get_all_drinks(is_short=False)
+        })
+    except Exception as exp:
+        abort(exp.code)
 
 
 """
