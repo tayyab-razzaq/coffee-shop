@@ -177,11 +177,6 @@ def delete_drink(drink_id):
 
 """
 
-"""
-@TODO implement error handler for 404
-    error handler should conform to general task above
-"""
-
 # Error Handling
 
 
