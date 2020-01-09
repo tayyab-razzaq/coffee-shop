@@ -13,7 +13,8 @@ from urllib.request import urlopen
 from ..constants import (
     AUTHORIZATION_MALFORMED, MISSING_AUTHORIZATION, MISSING_BEARER,
     MISSING_BEARER_TOKEN, MISSING_TOKEN, STATUS_CODE_MESSAGES,
-    STATUS_FORBIDDEN, STATUS_UNAUTHORIZED, TOKEN_EXPIRED, INCORRECT_CLAIMS
+    STATUS_FORBIDDEN, STATUS_UNAUTHORIZED, TOKEN_EXPIRED,
+    INCORRECT_CLAIMS, UNABLE_TO_PARSE
 )
 
 AUTH0_DOMAIN = 'kagaroatgoku.auth0.com'
@@ -156,6 +157,9 @@ def verify_decode_jwt(token):
 
         except jwt.JWTClaimsError:
             raise_auth_error(INCORRECT_CLAIMS)
+
+        except Exception:
+            raise_auth_error(UNABLE_TO_PARSE)
 
         return payload
 
