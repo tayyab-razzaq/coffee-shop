@@ -4,7 +4,10 @@ from flask import request
 
 from functools import wraps
 
-from ..constants import STATUS_CODE_MESSAGES, STATUS_FORBIDDEN, STATUS_UNAUTHORIZED
+from ..constants import (
+    MISSING_AUTHORIZATION, MISSING_BEARER, MISSING_BEARER_TOKEN, MISSING_TOKEN,
+    STATUS_CODE_MESSAGES, STATUS_FORBIDDEN, STATUS_UNAUTHORIZED
+)
 
 AUTH0_DOMAIN = 'udacity-fsnd.auth0.com'
 ALGORITHMS = ['RS256']
@@ -59,17 +62,17 @@ def get_token_auth_header():
     """
     authorization = request.headers.get('Authorization')
     if not authorization:
-        raise_auth_error('Authorization header is expected')
+        raise_auth_error(MISSING_AUTHORIZATION)
 
     authorization_parts = authorization.split(' ')
     if authorization_parts[0].lower() != 'bearer':
-        raise_auth_error('Authorization header must start with "Bearer".')
+        raise_auth_error(MISSING_BEARER)
 
     elif len(authorization_parts) == 1:
-        raise_auth_error('token not found')
+        raise_auth_error(MISSING_TOKEN)
 
     elif len(authorization_parts) > 2:
-        raise_auth_error('Authorization header must be bearer token.')
+        raise_auth_error(MISSING_BEARER_TOKEN)
 
     token = authorization_parts[1]
     return token

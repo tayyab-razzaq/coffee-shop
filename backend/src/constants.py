@@ -26,3 +26,5 @@ STATUS_CODE_MESSAGES = {
 
 MISSING_AUTHORIZATION = 'Authorization header in request headers is mandatory.'
 MISSING_BEARER = 'Authorization header must start with "Bearer".'
+MISSING_TOKEN = 'Authorization header must have token.'
+MISSING_BEARER_TOKEN = 'Authorization header must be a Bearer token.'
