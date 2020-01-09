@@ -2,7 +2,7 @@
 
 from functools import wraps
 
-from ..constants import STATUS_CODE_MESSAGES, STATUS_FORBIDDEN
+from ..constants import STATUS_CODE_MESSAGES, STATUS_FORBIDDEN, STATUS_UNAUTHORIZED
 
 AUTH0_DOMAIN = 'udacity-fsnd.auth0.com'
 ALGORITHMS = ['RS256']
@@ -33,6 +33,14 @@ class AuthError(Exception):
         it should raise an AuthError if the header is malformed
     return the token part of the header.
 """
+
+
+def raise_auth_error(message):
+    raise AuthError({
+        'success': False,
+        'message': message,
+        'error': STATUS_UNAUTHORIZED
+    }, STATUS_UNAUTHORIZED)
 
 
 def get_token_auth_header():
