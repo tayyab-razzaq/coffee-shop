@@ -13,8 +13,8 @@ from urllib.request import urlopen
 from ..constants import (
     AUTHORIZATION_MALFORMED, MISSING_AUTHORIZATION, MISSING_BEARER,
     MISSING_BEARER_TOKEN, MISSING_TOKEN, STATUS_CODE_MESSAGES,
-    STATUS_FORBIDDEN, STATUS_UNAUTHORIZED, TOKEN_EXPIRED,
-    INCORRECT_CLAIMS, UNABLE_TO_PARSE
+    STATUS_FORBIDDEN, STATUS_UNAUTHORIZED, TOKEN_EXPIRED, STATUS_BAD_REQUEST,
+    INCORRECT_CLAIMS, UNABLE_TO_PARSE, INAPPROPRIATE_KEY
 )
 
 AUTH0_DOMAIN = 'kagaroatgoku.auth0.com'
@@ -48,18 +48,19 @@ class AuthError(Exception):
 """
 
 
-def raise_auth_error(message):
+def raise_auth_error(message, error=STATUS_UNAUTHORIZED):
     """
     Raise auth error with given message.
 
     :param message:
+    :param error:
     :return:
     """
     raise AuthError({
         'success': False,
         'message': message,
-        'error': STATUS_UNAUTHORIZED
-    }, STATUS_UNAUTHORIZED)
+        'error': error
+    }, error)
 
 
 def get_token_auth_header():
@@ -151,6 +152,7 @@ def verify_decode_jwt(token):
                 audience=API_AUDIENCE,
                 issuer='https://' + AUTH0_DOMAIN + '/'
             )
+            return payload
 
         except jwt.ExpiredSignatureError:
             raise_auth_error(TOKEN_EXPIRED)
@@ -159,11 +161,9 @@ def verify_decode_jwt(token):
             raise_auth_error(INCORRECT_CLAIMS)
 
         except Exception:
-            raise_auth_error(UNABLE_TO_PARSE)
+            raise_auth_error(UNABLE_TO_PARSE, STATUS_BAD_REQUEST)
 
-        return payload
-
-    raise Exception('Not Implemented')
+    raise_auth_error(INAPPROPRIATE_KEY, STATUS_BAD_REQUEST)
 
 
 """
