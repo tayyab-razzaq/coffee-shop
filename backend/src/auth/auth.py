@@ -46,6 +46,11 @@ def raise_auth_error(message):
 
 
 def get_token_auth_header():
+    """
+    Get token from authorization header and raise error is header is incorrect.
+
+    :return:
+    """
     authorization = request.headers.get('Authorization')
     if not authorization:
         raise_auth_error('Authorization header is expected')
