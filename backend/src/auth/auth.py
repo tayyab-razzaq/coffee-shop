@@ -1,12 +1,17 @@
 """Module for auth."""
 
+from flask import request
+
 from functools import wraps
 
-from ..constants import STATUS_CODE_MESSAGES, STATUS_FORBIDDEN
+from ..constants import (
+    MISSING_AUTHORIZATION, MISSING_BEARER, MISSING_BEARER_TOKEN, MISSING_TOKEN,
+    STATUS_CODE_MESSAGES, STATUS_FORBIDDEN, STATUS_UNAUTHORIZED
+)
 
-AUTH0_DOMAIN = 'udacity-fsnd.auth0.com'
+AUTH0_DOMAIN = 'kagaroatgoku.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = 'dev'
+API_AUDIENCE = 'coffee-shop'
 
 
 class AuthError(Exception):
@@ -35,13 +40,42 @@ class AuthError(Exception):
 """
 
 
+def raise_auth_error(message):
+    """
+    Raise auth error with given message.
+
+    :param message:
+    :return:
+    """
+    raise AuthError({
+        'success': False,
+        'message': message,
+        'error': STATUS_UNAUTHORIZED
+    }, STATUS_UNAUTHORIZED)
+
+
 def get_token_auth_header():
     """
-    Get token auth header.
+    Get token from authorization header and raise error is header is incorrect.
 
     :return:
     """
-    raise Exception('Not Implemented')
+    authorization = request.headers.get('Authorization')
+    if not authorization:
+        raise_auth_error(MISSING_AUTHORIZATION)
+
+    authorization_parts = authorization.split(' ')
+    if authorization_parts[0].lower() != 'bearer':
+        raise_auth_error(MISSING_BEARER)
+
+    elif len(authorization_parts) == 1:
+        raise_auth_error(MISSING_TOKEN)
+
+    elif len(authorization_parts) > 2:
+        raise_auth_error(MISSING_BEARER_TOKEN)
+
+    token = authorization_parts[1]
+    return token
 
 
 def check_permissions(permission, payload):
@@ -105,14 +139,16 @@ def requires_auth(permission=''):
     :param permission:
     :return:
     """
-    def requires_auth_decorator(f):
+
+    def requires_auth_decorator(function):
         """
         Require Auth decorator.
 
-        :param f:
+        :param function:
         :return:
         """
-        @wraps(f)
+
+        @wraps(function)
         def wrapper(*args, **kwargs):
             """
             Decorate wrapper method.
@@ -124,7 +160,7 @@ def requires_auth(permission=''):
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
             check_permissions(permission, payload)
-            return f(payload, *args, **kwargs)
+            return function(payload, *args, **kwargs)
 
         return wrapper
 
