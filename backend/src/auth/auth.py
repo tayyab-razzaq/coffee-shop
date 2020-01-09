@@ -50,6 +50,10 @@ def get_token_auth_header():
     if not authorization:
         raise_auth_error('Authorization header is expected')
 
+    authorization_parts = authorization.split(' ')
+    if authorization_parts[0].lower() != 'bearer':
+        raise_auth_error('Authorization header must start with "Bearer".')
+
     raise Exception('Not Implemented')
 
 
