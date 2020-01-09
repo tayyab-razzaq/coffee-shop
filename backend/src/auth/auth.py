@@ -1,10 +1,14 @@
 """Module for auth."""
 
+import json
+
 from flask import request
 
 from functools import wraps
 
 from jose import jwt
+
+from urllib.request import urlopen
 
 from ..constants import (
     AUTHORIZATION_MALFORMED, MISSING_AUTHORIZATION, MISSING_BEARER,
@@ -122,6 +126,31 @@ def verify_decode_jwt(token):
     unverified_header = jwt.get_unverified_header(token)
     if 'kid' not in unverified_header:
         raise_auth_error(AUTHORIZATION_MALFORMED)
+
+    json_url = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
+    jwks = json.loads(json_url.read())
+    rsa_key = {}
+
+    for key in jwks['keys']:
+        if key['kid'] == unverified_header['kid']:
+            rsa_key = {
+                'kty': key['kty'],
+                'kid': key['kid'],
+                'use': key['use'],
+                'n': key['n'],
+                'e': key['e']
+            }
+
+    if rsa_key:
+        payload = jwt.decode(
+            token,
+            rsa_key,
+            algorithms=ALGORITHMS,
+            audience=API_AUDIENCE,
+            issuer='https://' + AUTH0_DOMAIN + '/'
+        )
+
+        return payload
 
     raise Exception('Not Implemented')
 
