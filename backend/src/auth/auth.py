@@ -4,8 +4,11 @@ from flask import request
 
 from functools import wraps
 
+from jose import jwt
+
 from ..constants import (
-    MISSING_AUTHORIZATION, MISSING_BEARER, MISSING_BEARER_TOKEN, MISSING_TOKEN,
+    AUTHORIZATION_MALFORMED, MISSING_AUTHORIZATION, MISSING_BEARER,
+    MISSING_BEARER_TOKEN, MISSING_TOKEN,
     STATUS_CODE_MESSAGES, STATUS_FORBIDDEN, STATUS_UNAUTHORIZED
 )
 
@@ -116,6 +119,10 @@ def verify_decode_jwt(token):
     :param token:
     :return:
     """
+    unverified_header = jwt.get_unverified_header(token)
+    if 'kid' not in unverified_header:
+        raise_auth_error(AUTHORIZATION_MALFORMED)
+
     raise Exception('Not Implemented')
 
 
