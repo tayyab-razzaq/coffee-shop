@@ -60,7 +60,8 @@ def get_token_auth_header():
     elif len(authorization_parts) > 2:
         raise_auth_error('Authorization header must be bearer token.')
 
-    raise Exception('Not Implemented')
+    token = authorization_parts[1]
+    return token
 
 
 def check_permissions(permission, payload):
