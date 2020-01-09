@@ -23,3 +23,6 @@ STATUS_CODE_MESSAGES = {
     STATUS_UNPROCESSABLE_ENTITY: 'Unprocessable Entity',
     STATUS_INTERNAL_SERVER_ERROR: 'Internal Server Error',
 }
+
+MISSING_AUTHORIZATION = 'Authorization header in request headers is mandatory.'
+MISSING_BEARER = 'Authorization header must start with "Bearer".'

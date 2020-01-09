@@ -105,14 +105,16 @@ def requires_auth(permission=''):
     :param permission:
     :return:
     """
-    def requires_auth_decorator(f):
+
+    def requires_auth_decorator(function):
         """
         Require Auth decorator.
 
-        :param f:
+        :param function:
         :return:
         """
-        @wraps(f)
+
+        @wraps(function)
         def wrapper(*args, **kwargs):
             """
             Decorate wrapper method.
@@ -124,7 +126,7 @@ def requires_auth(permission=''):
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
             check_permissions(permission, payload)
-            return f(payload, *args, **kwargs)
+            return function(payload, *args, **kwargs)
 
         return wrapper
 
