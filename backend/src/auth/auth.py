@@ -1,5 +1,7 @@
 """Module for auth."""
 
+from flask import request
+
 from functools import wraps
 
 from ..constants import STATUS_CODE_MESSAGES, STATUS_FORBIDDEN, STATUS_UNAUTHORIZED
@@ -44,11 +46,10 @@ def raise_auth_error(message):
 
 
 def get_token_auth_header():
-    """
-    Get token auth header.
+    authorization = request.headers.get('Authorization')
+    if not authorization:
+        raise_auth_error('Authorization header is expected')
 
-    :return:
-    """
     raise Exception('Not Implemented')
 
 
