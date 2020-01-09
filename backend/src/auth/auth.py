@@ -38,6 +38,12 @@ class AuthError(Exception):
 
 
 def raise_auth_error(message):
+    """
+    Raise auth error with given message.
+
+    :param message:
+    :return:
+    """
     raise AuthError({
         'success': False,
         'message': message,
