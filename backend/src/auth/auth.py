@@ -57,6 +57,9 @@ def get_token_auth_header():
     elif len(authorization_parts) == 1:
         raise_auth_error('token not found')
 
+    elif len(authorization_parts) > 2:
+        raise_auth_error('Authorization header must be bearer token.')
+
     raise Exception('Not Implemented')
 
 
