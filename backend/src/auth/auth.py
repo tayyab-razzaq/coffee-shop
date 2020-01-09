@@ -1,12 +1,20 @@
 """Module for auth."""
 
+import json
+
 from flask import request
 
 from functools import wraps
 
+from jose import jwt
+
+from urllib.request import urlopen
+
 from ..constants import (
-    MISSING_AUTHORIZATION, MISSING_BEARER, MISSING_BEARER_TOKEN, MISSING_TOKEN,
-    STATUS_CODE_MESSAGES, STATUS_FORBIDDEN, STATUS_UNAUTHORIZED
+    AUTHORIZATION_MALFORMED, MISSING_AUTHORIZATION, MISSING_BEARER,
+    MISSING_BEARER_TOKEN, MISSING_TOKEN, STATUS_CODE_MESSAGES,
+    STATUS_FORBIDDEN, STATUS_UNAUTHORIZED, TOKEN_EXPIRED, STATUS_BAD_REQUEST,
+    INCORRECT_CLAIMS, UNABLE_TO_PARSE, INAPPROPRIATE_KEY
 )
 
 AUTH0_DOMAIN = 'kagaroatgoku.auth0.com'
@@ -40,18 +48,19 @@ class AuthError(Exception):
 """
 
 
-def raise_auth_error(message):
+def raise_auth_error(message, error=STATUS_UNAUTHORIZED):
     """
     Raise auth error with given message.
 
     :param message:
+    :param error:
     :return:
     """
     raise AuthError({
         'success': False,
         'message': message,
-        'error': STATUS_UNAUTHORIZED
-    }, STATUS_UNAUTHORIZED)
+        'error': error
+    }, error)
 
 
 def get_token_auth_header():
@@ -116,7 +125,45 @@ def verify_decode_jwt(token):
     :param token:
     :return:
     """
-    raise Exception('Not Implemented')
+    unverified_header = jwt.get_unverified_header(token)
+    if 'kid' not in unverified_header:
+        raise_auth_error(AUTHORIZATION_MALFORMED)
+
+    json_url = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
+    jwks = json.loads(json_url.read())
+    rsa_key = {}
+
+    for key in jwks['keys']:
+        if key['kid'] == unverified_header['kid']:
+            rsa_key = {
+                'kty': key['kty'],
+                'kid': key['kid'],
+                'use': key['use'],
+                'n': key['n'],
+                'e': key['e']
+            }
+
+    if rsa_key:
+        try:
+            payload = jwt.decode(
+                token,
+                rsa_key,
+                algorithms=ALGORITHMS,
+                audience=API_AUDIENCE,
+                issuer='https://' + AUTH0_DOMAIN + '/'
+            )
+            return payload
+
+        except jwt.ExpiredSignatureError:
+            raise_auth_error(TOKEN_EXPIRED)
+
+        except jwt.JWTClaimsError:
+            raise_auth_error(INCORRECT_CLAIMS)
+
+        except Exception:
+            raise_auth_error(UNABLE_TO_PARSE, STATUS_BAD_REQUEST)
+
+    raise_auth_error(INAPPROPRIATE_KEY, STATUS_BAD_REQUEST)
 
 
 """
