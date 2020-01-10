@@ -1,10 +1,12 @@
 """Module for api."""
 
+import json
+
 from flask import Flask, abort, jsonify, request
 
 from flask_cors import CORS
 
-from .auth import AuthError
+from .auth import AuthError, requires_auth
 from .constants import (
     STATUS_BAD_REQUEST, STATUS_CODE_MESSAGES, STATUS_FORBIDDEN,
     STATUS_INTERNAL_SERVER_ERROR, STATUS_METHOD_NOT_ALLOWED,
@@ -13,7 +15,7 @@ from .constants import (
 from .database import (
     Drink, add_new_drink, get_all_drinks, setup_db, update_drink_in_db
 )
-
+# from .database.models import db_drop_and_create_all
 
 app = Flask(__name__)
 setup_db(app)
@@ -44,8 +46,6 @@ def after_request(response):
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 """
-
-
 # db_drop_and_create_all()
 
 # ROUTES
@@ -75,10 +75,12 @@ def get_drinks():
 
 
 @app.route('/drinks-detail')
-def get_drinks_detail():
+@requires_auth('get:drinks-detail')
+def get_drinks_detail(token):
     """
     Get drinks api with long detail.
 
+    :param token:
     :return:
     """
     try:
@@ -98,14 +100,18 @@ def get_drinks_detail():
 
 
 @app.route('/drinks', methods=['POST'])
-def add_drink():
+@requires_auth('post:drinks')
+def add_drink(token):
     """
     Add new drink in the table.
 
+    :param token:
     :return:
     """
     try:
         drink_data = request.get_json()
+        drink_data['recipe'] = json.dumps(drink_data.get('recipe'))
+
         drink = add_new_drink(drink_data)
         return jsonify({
             'success': True,
@@ -122,19 +128,22 @@ def add_drink():
 
 
 @app.route('/drinks/<drink_id>', methods=['PATCH'])
-def update_drink(drink_id):
+@requires_auth('patch:drinks')
+def update_drink(token, drink_id):
     """
     Update drink by given drink id.
 
+    :param token:
     :param drink_id:
     :return:
     """
     try:
-        drink_data = request.get_json()
         drink = Drink.query.filter_by(id=drink_id).first()
         if not drink:
             abort(STATUS_NOT_FOUND)
 
+        drink_data = request.get_json()
+        drink_data['recipe'] = json.dumps(drink_data.get('recipe'))
         update_drink_in_db(drink, drink_data)
         return jsonify({
             'success': True,
@@ -152,10 +161,12 @@ def update_drink(drink_id):
 
 
 @app.route('/drinks/<drink_id>', methods=['DELETE'])
-def delete_drink(drink_id):
+@requires_auth('delete:drinks')
+def delete_drink(token, drink_id):
     """
     Delete drink by given drink id.
 
+    :param token:
     :param drink_id:
     :return:
     """
@@ -165,7 +176,7 @@ def delete_drink(drink_id):
             abort(STATUS_NOT_FOUND)
 
         drink.delete()
-        jsonify({
+        return jsonify({
             'success': True,
             'delete': drink_id
         })
