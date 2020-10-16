@@ -15,11 +15,19 @@ from .constants import (
 from .database import (
     Drink, add_new_drink, get_all_drinks, setup_db, update_drink_in_db
 )
+
 # from .database.models import db_drop_and_create_all
 
 app = Flask(__name__)
 setup_db(app)
-CORS(app, resources={r"*": {"origins": "*"}})
+CORS(
+    app,
+    resources={
+        r"*": {
+            "origins": "*"
+        }
+    }
+)
 
 
 @app.after_request
@@ -46,9 +54,9 @@ def after_request(response):
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 """
-# db_drop_and_create_all()
 
-# ROUTES
+
+# db_drop_and_create_all()
 
 
 @app.route('/drinks')

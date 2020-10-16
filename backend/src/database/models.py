@@ -62,7 +62,10 @@ class Drink(db.Model):
         """
         print(json.loads(self.recipe))
         short_recipe = [
-            {'color': r['color'], 'parts': r['parts']}
+            {
+                'color': r['color'],
+                'parts': r['parts']
+            }
             for r in json.loads(self.recipe)
         ]
         return {
